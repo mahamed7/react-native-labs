@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: monflow-wallet-ui (lint)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: monflow-wallet-ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: monflow-wallet-ui/package-lock.json
+      - run: npm ci
+      - run: npx eslint .
+
+  install:
+    name: navigation-login (install)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: navigation-login
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: navigation-login/package-lock.json
+      - run: npm ci
